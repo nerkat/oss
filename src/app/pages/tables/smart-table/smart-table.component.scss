@@ -1,0 +1,40 @@
+@import '../../../@theme/styles/themes';
+
+@include nb-install-component() {
+  nb-card {
+    transform: translate3d(0, 0, 0);
+  }
+}
+
+
+/deep/.ng2-smart-action {
+  /deep/.fa {
+    font-size: 18px;
+  }
+}
+
+/deep/ng2-smart-table table tr td {
+  padding: 0 !important;
+
+  div {
+
+    div,
+    a {
+      padding: 0.875rem 1.25rem;
+      display: block;
+    }
+  }
+}
+
+
+/deep/input[type="checkbox"].form-control{
+  width: auto !important;
+  height: auto !important;
+  margin: 0 20px !important;
+}
+
+
+/deep/nb-card-header{
+  display: flex !important;
+  justify-content: space-between !important;
+}

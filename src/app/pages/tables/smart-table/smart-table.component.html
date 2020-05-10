@@ -1,0 +1,15 @@
+<nb-card [nbSpinner]="loading" nbSpinnerStatus="success" nbSpinnerSize="large">
+  <nb-card-header>
+    Users
+    <div [hidden]="!showActionButon">
+      <button nbButton>Actions</button>
+    </div>
+  </nb-card-header>
+
+  <nb-card-body>
+    <ng2-smart-table [settings]="settings" [source]="source" (userRowSelect)="onRowSelect($event)" >
+    </ng2-smart-table>
+  </nb-card-body>
+</nb-card>
+
+

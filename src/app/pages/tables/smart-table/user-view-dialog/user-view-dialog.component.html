@@ -1,0 +1,40 @@
+    <nb-card
+      [nbSpinner]="!widgetData"
+      nbSpinnerStatus="success"
+      nbSpinnerSize="small"
+    >
+      <nb-card-body>
+        <table class="infoClass" *ngIf="widgetData">
+          <tr>
+            <th>Widget name</th>
+            <th>Clicks</th>
+            <th>Conversion</th>
+            <th>Conversion Revenue</th>
+            <th>Impressions</th>
+          </tr>
+          <tr>
+            <td>{{ widgetData[0]["Widget name"] }}</td>
+            <td>{{ widgetData[0].Clicks }}</td>
+            <td>{{ widgetData[0]["Conversion"] }}</td>
+            <td>{{ widgetData[0]["Conversion Revenue"] }}</td>
+            <td>{{ widgetData[0]["Impressions"] }}</td>
+          </tr>
+
+          <tr>
+            <td>{{ widgetData[1]["Widget name"] }}</td>
+            <td>{{ widgetData[1].Clicks }}</td>
+            <td>{{ widgetData[1]["Conversion"] }}</td>
+            <td>{{ widgetData[1]["Conversion Revenue"] }}</td>
+            <td>{{ widgetData[1]["Impressions"] }}</td>
+          </tr>
+
+          <tr>
+            <td>{{ widgetData[2]["Widget name"] }}</td>
+            <td>{{ widgetData[2].Clicks }}</td>
+            <td>{{ widgetData[2]["Conversion"] }}</td>
+            <td>{{ widgetData[2]["Conversion Revenue"] }}</td>
+            <td>{{ widgetData[2]["Impressions"] }}</td>
+          </tr>
+        </table>
+      </nb-card-body>
+    </nb-card>
