@@ -165,6 +165,7 @@ export class SmartTableComponent {
     },
   };
 
+  
   loading: boolean = true;
   showActionButon: boolean = false;
   source: LocalDataSource = new LocalDataSource();
