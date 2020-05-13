@@ -1,10 +1,18 @@
-import { Component, OnInit, Renderer2, ElementRef, ChangeDetectorRef, Input, Output, EventEmitter} from "@angular/core";
+import {
+  Component,
+  OnInit,
+  Renderer2,
+  ElementRef,
+  ChangeDetectorRef,
+  Input,
+  Output,
+  EventEmitter,
+} from "@angular/core";
 import { LocalDataSource, ViewCell } from "ng2-smart-table";
 import { HttpHeaders, HttpClient } from "@angular/common/http";
-import { NbDialogService } from "@nebular/theme";
 import { UserViewDialogComponent } from "./user-view-dialog/user-view-dialog.component";
-import {InjiService} from '../smart-table/inji.service';
-import { Subject } from 'rxjs';
+import { InjiService } from "../smart-table/inji.service";
+import { Subject } from "rxjs";
 
 @Component({
   selector: "view-domain",
@@ -28,8 +36,8 @@ export class DomainViewComponent implements OnInit {
 })
 export class BaseViewComponent implements ViewCell, OnInit {
   constructor(
-    private InjiService: InjiService
-   ,private ref: ChangeDetectorRef
+    private InjiService: InjiService,
+    private ref: ChangeDetectorRef
   ) {}
 
   renderValue: string;
@@ -38,8 +46,8 @@ export class BaseViewComponent implements ViewCell, OnInit {
     this.renderValue = this.value.toString().toUpperCase();
 
     this.InjiService.componentSubjects[this.rowData.id] = new Subject();
-    this.InjiService.componentSubjects[this.rowData.id].subscribe(s=>{
-      if(s=="remove"){
+    this.InjiService.componentSubjects[this.rowData.id].subscribe((s) => {
+      if (s == "remove") {
         this.closestParent.remove();
       }
       //this.rowData = {username : "test"}
@@ -50,7 +58,7 @@ export class BaseViewComponent implements ViewCell, OnInit {
       //this.renderValue = this.value.toString().toUpperCase(); //"Open";
       this.isOpen = false;
       //firing the change detection manually
-      this.ref.markForCheck();    
+      this.ref.markForCheck();
     });
   }
 
@@ -59,21 +67,24 @@ export class BaseViewComponent implements ViewCell, OnInit {
 
   @Output() edit: EventEmitter<any> = new EventEmitter(); //test
 
-  isOpen:boolean = false;
-  expanededComp:any = null;
-  closestParent:any = null;
+  isOpen: boolean = false;
+  expanededComp: any = null;
+  closestParent: any = null;
 
   onClick(event) {
-    
-    if(this.isOpen){
+    if (this.isOpen) {
       this.closestParent = event.target.closest("tr");
       this.InjiService.removeComponent(this.expanededComp, this.closestParent);
       this.expanededComp = null;
       //this.renderValue = this.value.toString().toUpperCase(); //"Open";
       this.isOpen = false;
-    }else{
+    } else {
       this.closestParent = event.target.closest("tr");
-      this.expanededComp = this.InjiService.appendComponent(UserViewDialogComponent, this.rowData, this.closestParent);
+      this.expanededComp = this.InjiService.appendComponent(
+        UserViewDialogComponent,
+        this.rowData,
+        this.closestParent
+      );
       //this.renderValue = "Close";
       this.isOpen = true;
     }
@@ -87,7 +98,7 @@ export class BaseViewComponent implements ViewCell, OnInit {
 })
 export class SmartTableComponent {
   settings = {
-    noDataMessage: '',
+    noDataMessage: "",
     actions: { edit: false, add: false, delete: false },
     selectMode: "multi",
     columns: {
@@ -130,6 +141,27 @@ export class SmartTableComponent {
         renderComponent: BaseViewComponent,
         sortDirection: "desc",
       },
+      created_on: {
+        title: "Life Cycle",
+        type: "custom",
+        valuePrepareFunction: (cell, row) => {
+          var uninstall_date = new Date(row.uninstall_on);
+          var created_date = new Date(cell);
+          var sec =
+            uninstall_date.getTime() / 1000 - created_date.getTime() / 1000;
+
+          var days = Math.floor(sec / (3600 * 24));
+          var hrs = Math.floor((sec - days * 3600 * 24) / 3600);
+          var min = Math.floor((sec - hrs * 3600 - days * 3600 * 24) / 60);
+          cell = days + "D " + hrs + "H " + min + "M ";
+          if (!row.uninstall_on) {
+            cell = "Stil Active";
+          }
+
+          return { cell, row };
+        },
+        renderComponent: BaseViewComponent
+      },
     },
   };
 
@@ -137,10 +169,9 @@ export class SmartTableComponent {
   showActionButon: boolean = false;
   source: LocalDataSource = new LocalDataSource();
   selectedRows;
+  lifeCycle;
 
-
-
-  constructor(private httpClient: HttpClient, private renderer: Renderer2 , private el: ElementRef) {
+  constructor(private httpClient: HttpClient) {
     let url =
       "https://app.osswebapps.com/oss/web_api/api.php?method_name=get_all_user";
 
@@ -159,11 +190,25 @@ export class SmartTableComponent {
     this.httpClient.post(url, body, options).subscribe((data) => {
       this.source.load(data["data"]);
       this.loading = false;
+      var avgLifeCycle = 0;
+      data["data"].forEach((element) => {
+        if (element!.uninstall_on) {
+          var uninstall_date = new Date(element.uninstall_on);
+          var created_date = new Date(element.created_on);
+          var sec =
+            uninstall_date.getTime() / 1000 - created_date.getTime() / 1000;
+          avgLifeCycle += sec;
+        }
+      });
+      avgLifeCycle = avgLifeCycle / data["data"].length;
+      var days = Math.floor(avgLifeCycle / (3600 * 24));
+      var hrs = Math.floor((avgLifeCycle - days * 3600 * 24) / 3600);
+      var min = Math.floor((avgLifeCycle - hrs * 3600 - days * 3600 * 24) / 60);
+      this.lifeCycle = days + "D " + hrs + "H " + min + "M ";
     });
   }
 
   onRowSelect(event) {
-
     this.selectedRows = event.selected;
     if (event.selected.length > 0) {
       this.showActionButon = true;

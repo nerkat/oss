@@ -3,9 +3,7 @@ import { Injectable,Injector,
   EmbeddedViewRef,
 ApplicationRef, Renderer2, RendererFactory2  } from '@angular/core';
 import { UserViewDialogComponent } from './user-view-dialog/user-view-dialog.component';
-import { Observable, Subject } from 'rxjs';
-import { BaseViewComponent} from './smart-table.component';
-
+import { Subject } from 'rxjs';
 @Injectable()
 export class InjiService {
 
