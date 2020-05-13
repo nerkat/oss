@@ -160,7 +160,7 @@ export class SmartTableComponent {
 
           return { cell, row };
         },
-        renderComponent: BaseViewComponent
+        renderComponent: BaseViewComponent,
       },
     },
   };
