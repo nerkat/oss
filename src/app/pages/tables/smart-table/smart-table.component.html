@@ -2,7 +2,7 @@
   <nb-card-header>
     Users - ({{source.count()}}) - Average Life Cycle  - {{lifeCycle}}
     <div [hidden]="!showActionButon">
-      <button nbButton>Actions</button>
+      <button  [nbContextMenu]="items" nbButton>Actions</button>
     </div>
   </nb-card-header>
 

@@ -165,7 +165,10 @@ export class SmartTableComponent {
     },
   };
 
-  
+  items = [
+    { title: 'Extaned Trial' },
+    { title: 'Free Account' },
+  ];
   loading: boolean = true;
   showActionButon: boolean = false;
   source: LocalDataSource = new LocalDataSource();
