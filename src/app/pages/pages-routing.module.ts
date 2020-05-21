@@ -6,6 +6,7 @@ import { DashboardComponent } from './dashboard/dashboard.component';
 import { ECommerceComponent } from './e-commerce/e-commerce.component';
 import { NotFoundComponent } from './miscellaneous/not-found/not-found.component';
 import { SmartTableComponent } from './tables/smart-table/smart-table.component';
+import { GoogleTableComponent } from './tables/google-table/google-table.component';
 
 const routes: Routes = [{
   path: '',
@@ -14,6 +15,10 @@ const routes: Routes = [{
     {
       path: 'oss-dashboard',
       component: SmartTableComponent,
+    },
+    {
+      path: 'google-dashboard',
+      component: GoogleTableComponent,
     },
     {
       path: 'dashboard',
