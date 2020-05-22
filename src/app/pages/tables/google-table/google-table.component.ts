@@ -7,31 +7,13 @@ import {
   EventEmitter,
 } from "@angular/core";
 import { LocalDataSource, ViewCell } from "ng2-smart-table";
-import { HttpClient } from "@angular/common/http";
-
-
-@Component({
-  selector: "view-domain",
-  template: `
-    <a target="_blank" href="http://www.{{ value }}">
-      {{ value }}
-    </a>
-  `,
-  styles: [],
-})
-
-export class DomainViewComponent implements OnInit {
-  public value;
-  constructor() {}
-  ngOnInit() {}
-}
+import { HttpClient, HttpHeaders } from "@angular/common/http";
 
 @Component({
   selector: "view-base",
   template: ` <div>{{ value.cell }}</div> `,
   styles: [],
 })
-
 export class BaseViewComponent implements ViewCell, OnInit {
   constructor(private ref: ChangeDetectorRef) {}
 
@@ -56,7 +38,6 @@ export class BaseViewComponent implements ViewCell, OnInit {
   templateUrl: "./google-table.component.html",
   styleUrls: ["./google-table.component.scss"],
 })
-
 export class GoogleTableComponent {
   settings = {
     noDataMessage: "",
@@ -72,21 +53,23 @@ export class GoogleTableComponent {
         renderComponent: BaseViewComponent,
       },
       Campaign: {
-        title: "Domain",
-        type: "custom",
-        valuePrepareFunction: (cell) => cell,
-        renderComponent: DomainViewComponent,
-      },
-      "Avg. CPC": {
-        title: "Owner",
+        title: "Campaign",
         type: "custom",
         valuePrepareFunction: (cell, row) => {
           return { cell, row };
         },
         renderComponent: BaseViewComponent,
       },
-      "Pages per session": {
-        title: "Email",
+      "Avg. CPC": {
+        title: "Avg. CPC",
+        type: "custom",
+        valuePrepareFunction: (cell, row) => {
+          return { cell, row };
+        },
+        renderComponent: BaseViewComponent,
+      },
+      "Pages / session": {
+        title: "Pages per session",
         type: "custom",
         valuePrepareFunction: (cell, row) => {
           return { cell, row };
@@ -94,7 +77,7 @@ export class GoogleTableComponent {
         renderComponent: BaseViewComponent,
       },
       Clicks: {
-        title: "Status",
+        title: "Clicks",
         type: "custom",
         valuePrepareFunction: (cell, row) => {
           return { cell, row };
@@ -103,7 +86,7 @@ export class GoogleTableComponent {
         sortDirection: "desc",
       },
       "Bounce rate": {
-        title: "Life Cycle",
+        title: "Bounce rate",
         type: "custom",
         valuePrepareFunction: (cell, row) => {
           return { cell, row };
@@ -111,7 +94,7 @@ export class GoogleTableComponent {
         renderComponent: BaseViewComponent,
       },
       Cost: {
-        title: "Life Cycle",
+        title: "Cost",
         type: "custom",
         valuePrepareFunction: (cell, row) => {
           return { cell, row };
@@ -128,12 +111,15 @@ export class GoogleTableComponent {
   lifeCycle;
 
   constructor(private httpClient: HttpClient) {
-    let url =
-      "https://ec2-18-191-185-159.us-east-2.compute.amazonaws.com/?ourniceauthkey=gZueuM4xSgeXQ6kf9QHNcuZQETzjaHAZ9H9Fj2ydJ4q9BCRadkFj9FsCzy7sSjtUa5NtQ3hdmFa4z9J4fLH8b3zYwvdTxPz6YNhq2u3E3JadnPrWWkRcxSsAgeZv4tMBtr7wMzPuv9xqcJMuRF46ZdnPSwaq2Ccc2CntMQCRaXePSnTD7y4ZvYyce5VXJk9HTJb853pZ375Jj8HKpyjfqjxwLHJUV954KwGGefEN8k5jMgBzY6xVYfbcmG8BDg8V";
+    let url = "https://ec2-18-191-185-159.us-east-2.compute.amazonaws.com/";
 
-    let body = {};
-
-    let options = {};
+    let options = {
+      headers: new HttpHeaders().set(
+        "Content-Type",
+        "application/x-www-form-urlencoded"
+      ),
+    };
+    let body = `ourniceauthkey=${"gZueuM4xSgeXQ6kf9QHNcuZQETzjaHAZ9H9Fj2ydJ4q9BCRadkFj9FsCzy7sSjtUa5NtQ3hdmFa4z9J4fLH8b3zYwvdTxPz6YNhq2u3E3JadnPrWWkRcxSsAgeZv4tMBtr7wMzPuv9xqcJMuRF46ZdnPSwaq2Ccc2CntMQCRaXePSnTD7y4ZvYyce5VXJk9HTJb853pZ375Jj8HKpyjfqjxwLHJUV954KwGGefEN8k5jMgBzY6xVYfbcmG8BDg8V"}`;
 
     this.httpClient.post(url, body, options).subscribe((data) => {
       this.source.load(data["data"]);
