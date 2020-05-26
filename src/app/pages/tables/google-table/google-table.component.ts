@@ -111,7 +111,7 @@ export class GoogleTableComponent {
   lifeCycle;
 
   constructor(private httpClient: HttpClient) {
-    let url = "http://ec2-18-191-185-159.us-east-2.compute.amazonaws.com/";
+    let url = "https://ec2-18-191-185-159.us-east-2.compute.amazonaws.com/";
 
     let options = {
       headers: new HttpHeaders().set(
